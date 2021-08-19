@@ -36,6 +36,7 @@ type ListParams struct {
 	*api.API
 	Region  string
 	Deleted bool
+	Unusable bool
 }
 
 // Validate ensures that the parameters are usable by the consuming
@@ -62,7 +63,8 @@ func List(params ListParams) (*models.StackVersionConfigs, error) {
 	res, err := params.API.V1API.Stack.GetVersionStacks(
 		stack.NewGetVersionStacksParams().
 			WithContext(api.WithRegion(context.Background(), params.Region)).
-			WithShowDeleted(ec.Bool(params.Deleted)),
+			WithShowDeleted(ec.Bool(params.Deleted)).
+			WithShowUnusable(ec.Bool(params.Unusable)),
 		params.AuthWriter,
 	)
 	if err != nil {
